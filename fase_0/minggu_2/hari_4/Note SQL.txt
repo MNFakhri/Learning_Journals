@@ -1,0 +1,107 @@
+-- Membuat Table
+CREATE TABLE teachers (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    first_name varchar(25) NOT NULL,
+    last_name varchar(50),
+    school varchar(50) NOT NULL,
+    hire_date date,
+    salary numeric
+    );
+
+-- menambah kolom baru
+alter TABLE teachers add age int;
+
+-- menghapus kolom
+alter table teachers drop COLUMN age;
+
+-- menganti tipe data kolom salary
+alter table teachers MODIFY COLUMN salary int;
+
+-- mengubah nama table
+alter TABLE teachers RENAME to guru;
+alter TABLE guru rename to teachers;
+
+-- mengisi data ke table
+INSERT INTO teachers (id,first_name, last_name, school, hire_date, salary)
+    VALUES (1,'Janet', 'Smith', 'MIT', '2011-10-30', 36200),
+           (2,'Lee', 'Reynolds', 'MIT', '1993-05-22', 65000),
+           (3,'Samuel', 'Cole', 'Cambridge University', '2005-08-01', 43500),
+           (4,'Samantha', 'Bush', 'Cambridge University', '2011-10-30', 36200),
+           (5,'Betty', 'Diaz', 'Cambridge University', '2005-08-30', 43500),
+           (6,'Kathleen', 'Roush', 'MIT', '2010-10-22', 38500),
+           (7,'James', 'Diaz', 'Harvard University', '2003-07-18', 61000),
+           (8,'Zack', 'Smith', 'Harvard University', '2000-12-29', 55500),
+           (9,'Luis', 'Gonzales', 'Standford University', '2002-12-01', 50000),
+           (10,'Frank', 'Abbers', 'Standford University', '1999-01-30', 66000);
+
+-- melihat isi tabel
+select * from teachers;
+
+-- menghapus semua isi tabel
+TRUNCATE TABLE teachers;
+
+-- menghapus tabel
+drop TABLE teachers;
+
+-- mengubah isi dari salary = 3
+UPDATE teachers
+set salary=50000
+where id=3;
+
+-- menghapus isi dari data id = 6
+delete from teachers where id=6;
+
+INSERT INTO teachers (first_name, last_name, school, hire_date, salary)
+    VALUES ('Samuel', 'Abbers', 'Standford University', '2006-01-30', 32000),
+           ('Jessica', 'Abbers', 'Standford University', '2005-01-30', 33000),
+           ('Tom', 'Massi', 'Harvard University', '1999-09-09', 39500),
+           ('Esteban', 'Brown', 'MIT', '2007-01-30', 36000),
+           ('Carlos', 'Alonso', 'Standford University', '2001-01-30', 44000);
+select * from teachers;
+
+-- melihat kolom first name, last name, school
+select first_name,last_name,school from teachers;
+
+-- melihat nama yang mengajar di MIT
+select * from teachers where school="MIT";
+select * from teachers where BINARY school="MIT";
+
+-- melihat pengajar yang memiliki gaji diatas 60000
+select * FROM teachers WHERE salary>60000;
+
+-- melihat dosen yang mengajar di MIT dan memiliki gaji > 60000
+SELECT * from teachers where school="MIT" and salary>60000;
+
+-- mencari nama dosen nama belakang abbers or smith
+select * from teachers where last_name="abbers" or last_name="smith";
+select * from teachers where last_name in ("abbers","smith");
+
+-- melihat jumlah data di table teachers
+select COUNT(*) from teachers;
+select COUNT(*) as "jumlah_data" from teachers;
+
+-- melihat uniqe value di kolom school
+select DISTINCT school from teachers;
+
+-- menghitung jumlah unique value di school
+SELECT count(DISTINCT(school)) as "Jumlah Sekolah" from teachers;
+
+-- mengurutkan dosen berdasarkan last name desending
+select * from teachers order by last_name DESC;
+select * from teachers order by last_name ASC;
+
+select * from teachers order by last_name ASC, school DESC;
+
+
+
+-- Melihat kejahatan di chicago di jalan
+SELECT * 
+FROM `bigquery-public-data.chicago_crime.crime` 
+where location_description="STREET"
+LIMIT 1000;
+
+-- melihat jenis tindakan kejahatan yang unik beserta jumlahnya dan diurutkan dari terbanyak
+select primary_type, count(*) as total_crime
+from  `bigquery-public-data.chicago_crime.crime`
+group by primary_type
+order by total_crime desc;

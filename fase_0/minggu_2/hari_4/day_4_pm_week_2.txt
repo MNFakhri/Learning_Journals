@@ -1,0 +1,106 @@
+-- Melihat semua data ditable teacher
+SELECT * 
+FROM teachers;
+
+-- Melihat dosen yang salary-nya lebih besar dari 50000
+SELECT * 
+FROM teachers
+WHERE salary>50000;
+
+
+-- Menghitung dosen yang salary-nya lebih besar dari 50000
+SELECT COUNT(*) 
+FROM teachers
+WHERE salary>50000;
+
+--Percentage
+-- Melihat dosen yang first_name adalah "Samuel"
+SELECT * 
+FROM teachers
+WHERE first_name='Samuel';
+
+-- Melihat dosen yang first_name yang berawalan 'sam' "
+SELECT * 
+FROM teachers
+WHERE first_name LIKE 'Sam%'; -- % untuk mengignore kata setelahnya
+
+-- Melihat dosen yang first_name yang berakhiran 'an' "
+SELECT * 
+FROM teachers
+WHERE first_name LIKE '%an'; -- % untuk mengignore kata setelahnya
+
+-- Melihat dosen yang first_name yang mengandung "-sam-"
+SELECT * 
+FROM teachers
+WHERE first_name LIKE '%Sam%';
+
+-- Melihat Gaji dosen Tertinggi  
+SELECT MAX(salary)
+FROM teachers;
+
+-- Melihat Gaji dosen Terendah 
+SELECT MIN(salary)
+FROM teachers;
+
+-- Melihat average Gaji dosen 
+SELECT AVG(salary), floor(AVG(salary)), ceil (AVG(salary))
+FROM teachers;
+
+-- Melihat dosen yang memiliki gaji tertinggi cara salah
+select first_name, last_name, 
+FROM teachers
+where salary = MAX(salary;
+                   
+ -- Melihat dosen yang memiliki gaji tertinggi 
+select first_name, last_name
+FROM teachers
+where salary=(
+  	SELECT MAX(salary)
+  	FROM teachers);
+                   
+-- Melihat gaji tertinggi di setiap universitas
+select school, max(salary)
+from teachers
+group by school;
+
+-- Melihat dosen yang memiliki gaji tertinggi disetiap universitas
+select first_name, last_name, school, salary
+from teachers
+where (school,salary) in (
+	SELECT school, max(salary)
+	from teachers
+	group by school
+);
+
+-- menggabungkan tabel teachers dengan table courses
+select *
+from teachers                   
+join courses on teachers.id=courses.teachers_id;
+                   
+-- melihat dosen yang mengaja calculus
+select *
+from teachers
+join courses on teachers.id=courses.teachers_id
+WHERE courses.name='calculus';
+                   
+-- melihat jumlah mata kuliah di setiap universitas
+select teachers.school, count(courses.name) as "Total Matkul"
+from teachers
+join courses on teachers.id=courses.teachers_id
+group by teachers.school;
+                           
+-- melihat jumlah mata kuliah apa saja yang total mata kuliahnya lebih dari "3"
+select teachers.school AS univ, count(courses.name) as 'Total_Matkul'
+from teachers
+join courses on teachers.id=courses.teachers_id
+group by teachers.school
+having total_matkul>3;       - untuk memfilter lagi
+                   
+-- melihat first_name beserta jumlah mata kuliah yang diajarkan dan diurutkan secara ascending berdasarkan jumlahnya     
+select teachers.first_name, count(courses.name) as 'Total_Matkul'
+from teachers
+join courses on teachers.id=courses.teachers_id
+group by teachers.first_name
+ORDER BY total_matkul ASC;                                   
+                   
+                   
